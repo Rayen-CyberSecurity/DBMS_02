@@ -187,10 +187,10 @@ C ||--o{ L : "is borrowed in"
 
 | Line | Meaning |
 |------|---------|
-| `A }|--|{ B : "writes"` | An Author writes 1..N Books; a Book is written by 1..N Authors. Both sides are mandatory – a book with no author and an author with no book are not meaningful in this system. |
-| `B ||--|{ C : "is available as"` | A Book has 1..N physical Copies; a Copy belongs to exactly one Book. A book with no physical copy cannot be lent. |
-| `M ||--o{ L : "places"` | A Member places 0..N Loans; a Loan belongs to exactly one Member. Zero loans is valid – a new member has not borrowed anything yet. |
-| `C ||--o{ L : "is borrowed in"` | A Copy appears in 0..N Loans over its lifetime; a Loan involves exactly one Copy. Zero loans is valid for a copy that has never been checked out. |
+| `A }\|--\|{ B : "writes"` | An Author writes 1..N Books; a Book is written by 1..N Authors. Both sides are mandatory – a book with no author and an author with no book are not meaningful in this system. |
+| `B \|\|--\|{ C : "is available as"` | A Book has 1..N physical Copies; a Copy belongs to exactly one Book. A book with no physical copy cannot be lent. |
+| `M \|\|--o{ L : "places"` | A Member places 0..N Loans; a Loan belongs to exactly one Member. Zero loans is valid – a new member has not borrowed anything yet. |
+| `C \|\|--o{ L : "is borrowed in"` | A Copy appears in 0..N Loans over its lifetime; a Loan involves exactly one Copy. Zero loans is valid for a copy that has never been checked out. |
 
 > **Caveat:** The `Author`–`Book` relationship is N:M. In a relational schema
 > this would require an intermediate table (e.g. `writes(AuthorID, ISBN)`).
