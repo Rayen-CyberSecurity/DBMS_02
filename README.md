@@ -561,14 +561,7 @@ git commit -m "ci: render PlantUML schema and publish GitHub Release on tag"
 if you replaced it with `on: push: branches: ['main']`? Would the release
 workflow still make sense? Why or why not?
 
-> *Your answer:* If the trigger was:
-
-on:
- push:
-   branches:
-    - main
-
-then the workflow would run on every push to main. That would not make as much sense for releases, because even small edits or incomplete changes could trigger a release. Using tags is better because releases should happen intentionally.
+> *Your answer:* If the trigger was: `on: push: branches: ['main']` then the workflow would run on every push to main. That would not make as much sense for releases, because even small   edits or incomplete changes could trigger a release. Using tags is better because releases should happen   intentionally.
 
 **Question 5.2:** The step `apt-get install plantuml` takes roughly 20–30 seconds
 on every run. In a larger team with many releases per day, this adds up. Name
