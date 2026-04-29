@@ -412,9 +412,7 @@ git tag
 **Question 4.1:** Run `git push origin main`. Then open the **Actions** tab in
 your fork on GitHub. Did any workflow run trigger? Explain why or why not.
 
-> *Your answer:* git push origin main
-
-First, my branch is called master, not main, so that command does not work. Also, the workflow is configured to run only when pushing tags, not regular branch pushes.
+> *Your answer:*  First, my branch is called master, not main, so that command does not work.   Also, the workflow is   configured to run only when pushing tags, not regular branch pushes.
 
 **Question 4.2:** Run `git tag -v v1.0.0`. What information is shown that
 `git tag` alone does not display? What does the `-v` flag verify?
