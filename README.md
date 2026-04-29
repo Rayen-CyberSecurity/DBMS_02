@@ -67,7 +67,8 @@ git --version
 >
 > `[insert screenshot]`
 
----
+---<img width="669" height="458" alt="Prerequisites" src="https://github.com/user-attachments/assets/b63cc0cd-80f3-442d-82ec-ba146bb874de" />
+
 
 ## 0 – Fork and Clone the Repository
 
@@ -216,20 +217,20 @@ git commit -m "feat: complete ER schema for library management"
 ellipses). PlantUML uses Crow's Foot notation. Describe one concrete difference
 in how an N:M relationship is represented in each notation.
 
-> *Your answer:*
+> *Your answer:* In Chen notation, an N:M relationship is shown using a separate diamond between two entities (for example Author — writes — Book). In Crow’s Foot notation in PlantUML, there is no diamond, and the many-to-many relationship is shown directly with symbols at both ends of the line like }|--|{.
 
 **Question 2.2:** What would happen if you wrote `@startuml Library` instead of
 `@startuml` at the top of `schema.puml`? Try it locally (`plantuml -tsvg schema.puml`)
 and observe the output filename. Why would this break the workflow?
 
-> *Your answer:*
+> *Your answer:* instead of just @startuml, PlantUML may generate a different output filename instead of schema.svg. That would break the workflow because the GitHub Action expects a file specifically called schema.svg to upload as the release artifact.
 
 **Question 2.3:** The `Author`–`Book` relationship is N:M. Does your PlantUML
 diagram require you to model the intermediate join table explicitly, or does
 PlantUML abstract it away? At which stage of the design process would the join
 table appear?
 
-> *Your answer:*
+> *Your answer:*No, in the PlantUML diagram I do not need to explicitly draw the join table for the Author–Book many-to-many relationship. PlantUML abstracts that relationship. The join table would appear later when converting the conceptual ER model into the relational database schema.
 
 ---
 
@@ -296,7 +297,7 @@ Open `schema.svg` in a browser or SVG viewer.
 > **Screenshot 2:** Take a screenshot of `schema.svg` open in your browser,
 > showing all five entities and all four relationships, and insert it here.
 >
-> `[insert screenshot]`
+> <img width="992" height="591" alt="SVG" src="https://github.com/user-attachments/assets/5af563ab-4bad-49e2-9dcd-a5a82ce3e4e6" />
 
 Once the diagram looks correct, tell Git to ignore the generated artifact.
 The workflow will recreate it on every release:
@@ -324,13 +325,13 @@ git commit -m "chore: ignore generated SVG artifact"
 Name one shell command you could use to check the exit code of the last command
 and verify that the render succeeded, without opening the SVG file.
 
-> *Your answer:*
+> *Your answer:* echo $? If it prints: 0 then the last command ran successfully.
 
 **Question 3.2:** Delete `schema.svg` and run `plantuml -tsvg schema.puml` again.
 Then run `git status`. Is `schema.svg` shown as an untracked file? Explain why
 or why not.
 
-> *Your answer:*
+> *Your answer:* schema.svg is not shown as untracked in git status because it is ignored in .gitignore. Since it is a generated artifact, Git is told not to track it.
 
 ---
 
@@ -399,6 +400,8 @@ git tag
 > commits in order, and insert it here.
 >
 > `[insert screenshot]`
+> <img width="828" height="112" alt="Task 4 2" src="https://github.com/user-attachments/assets/a8129a8b-8724-4304-bf44-cafada890eb1" />
+
 
 > **Caveat:** Tags are not pushed automatically with `git push origin main`.
 > You must push them explicitly. Forgetting this step means the workflow never
@@ -409,12 +412,15 @@ git tag
 **Question 4.1:** Run `git push origin main`. Then open the **Actions** tab in
 your fork on GitHub. Did any workflow run trigger? Explain why or why not.
 
-> *Your answer:*
+> *Your answer:* git push origin main
+
+First, my branch is called master, not main, so that command does not work. Also, the workflow is configured to run only when pushing tags, not regular branch pushes.
 
 **Question 4.2:** Run `git tag -v v1.0.0`. What information is shown that
 `git tag` alone does not display? What does the `-v` flag verify?
 
-> *Your answer:*
+> *Your answer:* git tag only lists tag names.
+git tag -v v1.0.0 shows more information like the annotated tag message, tagger information, and verifies the tag signature. The -v flag checks authenticity of the annotated tag.
 
 ---
 
@@ -557,14 +563,21 @@ git commit -m "ci: render PlantUML schema and publish GitHub Release on tag"
 if you replaced it with `on: push: branches: ['main']`? Would the release
 workflow still make sense? Why or why not?
 
-> *Your answer:*
+> *Your answer:* If the trigger was:
+
+on:
+ push:
+   branches:
+    - main
+
+then the workflow would run on every push to main. That would not make as much sense for releases, because even small edits or incomplete changes could trigger a release. Using tags is better because releases should happen intentionally.
 
 **Question 5.2:** The step `apt-get install plantuml` takes roughly 20–30 seconds
 on every run. In a larger team with many releases per day, this adds up. Name
 one GitHub Actions mechanism that could eliminate this installation time on
 repeated runs.
 
-> *Your answer:*
+> *Your answer:* One solution would be using caching in GitHub Actions, or using a custom runner/container where PlantUML is already installed. That would avoid installing it every time.
 
 ---
 
@@ -590,7 +603,8 @@ Open your fork on GitHub and navigate to the **Actions** tab.
 > **Screenshot 4:** Take a screenshot of the completed GitHub Actions run
 > showing all four steps with green checkmarks, and insert it here.
 >
-> `[insert screenshot]`
+> <img width="1847" height="964" alt="Task 5 Screenshot 4" src="https://github.com/user-attachments/assets/0c4efc06-cfcd-412c-a12e-edd29609ba20" />
+
 
 Once the workflow has completed, navigate to **Releases** in the right sidebar.
 
@@ -602,7 +616,8 @@ Once the workflow has completed, navigate to **Releases** in the right sidebar.
 > release title, the release notes, and the `schema.svg` download link, and
 > insert it here.
 >
-> `[insert screenshot]`
+> <img width="1859" height="951" alt="Task 5 Screenshot 5" src="https://github.com/user-attachments/assets/842a856e-d5a1-44c6-a3d9-b9eb6ec49453" />
+
 
 ### Questions for Task 6
 
@@ -611,14 +626,14 @@ Once the workflow has completed, navigate to **Releases** in the right sidebar.
 Which takes longer, and by approximately what factor? What does this suggest
 about where optimisation effort should be directed?
 
-> *Your answer:*
+> *Your answer:* The Install PlantUML step took much longer than rendering the SVG. It was about several times slower (around 7–10 times). That suggests optimization should focus on reducing installation time, for example through caching.
 
 **Question 6.2:** Download `schema.svg` from the Release page and compare it
 to the `schema.svg` you rendered locally with `plantuml -tsvg schema.puml`.
 Are they identical? What does this tell you about the reproducibility of the
 build process?
 
-> *Your answer:*
+> *Your answer:* Yes, the released schema.svg and the one rendered locally are identical. This shows the build is reproducible, meaning the same source produces the same result locally and in CI.
 
 ---
 
@@ -632,7 +647,7 @@ your schema. What would be different if you had stored the diagram as a
 `.drawio` file or a PNG instead of a `.puml` file? What information would you
 lose?
 
-> *Your answer:*
+> *Your answer:* With a .puml file, Git can show exactly what changed in each commit, such as new entities or cardinality changes. If the diagram was stored as a binary .drawio file or PNG, those detailed textual changes would be much harder or impossible to track.
 
 **Question B – Collaboration:**
 Imagine two people editing `schema.puml` simultaneously on separate branches –
@@ -640,14 +655,14 @@ one adds a `Genre` entity, the other corrects a cardinality. When they merge,
 Git can show a textual diff of the conflict. Would this be possible with a
 binary diagram file? What practical consequence does this have for a team?
 
-> *Your answer:*
+> *Your answer:* With schema.puml, Git can show text merge conflicts if two people edit the diagram at the same time. With a binary diagram file, that would be much harder. For a team, this means text diagrams make collaboration and merging much easier.
 
 **Question C – Tag vs. branch for releases:**
 You tagged a specific commit as `v1.0.0` rather than pushing to a branch called
 `release`. What guarantee does an annotated tag offer that a branch cannot?
 Under what circumstance would someone want to use a branch instead?
 
-> *Your answer:*
+> *Your answer:* An annotated tag always points to one fixed commit, while a branch can move when new commits are added. That makes tags better for releases because they guarantee an exact version. A branch could still be useful for maintaining a long-term release branch with bug fixes.
 
 **Question D – The value of CI for documentation:**
 Before this exercise, updating a diagram meant: edit the source, export an
@@ -655,14 +670,15 @@ image, commit the image, hope the export matched the source. Describe in two
 sentences what the CI pipeline eliminates, and what new guarantee it provides
 instead.
 
-> *Your answer:*
+> *Your answer:* The CI pipeline removes the manual step of exporting and committing diagram images by hand. It guarantees the released diagram is always automatically generated from the exact source in the repository, which makes it reliable and consistent.
 
 > **Screenshot 6:** Take a screenshot of your terminal showing
 > `git log --oneline` with all commits from this exercise visible, then open
 > `schema.svg` from the Release in the same browser window alongside it.
 > Capture both in one screenshot and insert it here.
 >
-> `[insert screenshot]`
+> <img width="1868" height="1004" alt="Screenshot 2026-04-29 214002" src="https://github.com/user-attachments/assets/1c8ae077-9529-4372-a008-aefdaba401e6" />
+
 
 ---
 
