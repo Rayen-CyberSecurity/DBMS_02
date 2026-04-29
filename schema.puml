@@ -55,7 +55,16 @@ entity "Loan" as L {
 }
 
 ' ============================================================
-' TODO: Add relationships here
+' TODO:
+Author }|--|{ Book : writes
+Book ||--|{ Copy : has copies
+Member ||--o{ Loan : borrows
+Copy ||--o{ Loan : appears in
+
+
+
+
+
 '
 ' Crow's Foot notation:
 '   ||   exactly one     (mandatory one)
